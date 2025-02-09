@@ -1,14 +1,11 @@
 import express from 'express'
 import Redis from 'ioredis'
-import { MAX_CACHE_SIZE, PORT } from './constants.js';
-
+import { MAX_CACHE_SIZE } from './constants.js';
+import dotenv from 'dotenv'
+dotenv.config();
 const app = express();
-
-const redis = new Redis({
-    host:'127.0.0.1',
-    port:6379,
-});
-
+const port = process.env.PORT || 3000;
+const redis = new Redis(process.env.REDIS_URL);
 app.use(express.json())
 
 app.post('/cache',async (req,res)=>{
@@ -56,6 +53,6 @@ app.get('/ping',async(req,res)=>{
 })
 
 
-app.listen(PORT,()=>{
-    console.log(`Cache API running on http://localhost:${PORT}`)
+app.listen(port,()=>{
+    console.log(`Cache API running on http://localhost:${port}`)
 })
